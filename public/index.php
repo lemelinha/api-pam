@@ -2,8 +2,8 @@
 
 header("Content-type: application/json; charset=utf-8");
 
-require_once 'router.php';
-require_once 'functions.php';
+require_once '../router.php';
+require_once '../functions.php';
 
 $data = router();
 

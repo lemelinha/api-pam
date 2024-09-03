@@ -1,11 +1,11 @@
 <?php
 $routes = [
-    '/produtos' => 'GetProdutos',
-    '/alterar/[0-9]+' => 'AlterarProduto',
-    '/cadastrar' => 'CadastrarProduto',
-    '/deletar/[0-9]+' => 'DeletarProduto'
+    '/' => ['controller' => 'Index', 'method' => 'GET'],
+    '/produtos' => ['controller' => 'GetProdutos', 'method' => 'GET'],
+    '/alterar/[0-9]+' => ['controller' => 'AlterarProduto', 'method' => 'PUT'],
+    '/cadastrar' => ['controller' => 'CadastrarProduto', 'method' => 'POST'],
+    '/deletar/[0-9]+' => ['controller' => 'DeletarProduto', 'method' => 'DELETE']
 ];
-
 
 function exactMatchUriInArrayRoutes($uri, $routes)
 {
@@ -65,5 +65,10 @@ function router()
     if (!empty($matchedUri))
         $matchedUri = array_values($matchedUri)[0];
 
-    return [$matchedUri, $params];
+    if ($matchedUri['method'] != $_SERVER['REQUEST_METHOD']) {
+        echo json_encode(['ok' => false, 'msg' => 'Requisição recusada']);
+        die();
+    }
+
+    return [$matchedUri['controller'], $params];
 }

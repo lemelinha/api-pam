@@ -2,6 +2,13 @@
 
 $conn = require_once 'connection.php';
 
+function Index() {
+    header("Content-type: text/html; charset=utf-8");
+    $produtos = GetProdutos()['produtos'];
+    require_once '..\Views\index.php';
+    die();
+}
+
 function GetProdutos() {
     global $conn;
 
