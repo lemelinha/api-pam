@@ -1,7 +1,9 @@
 <?php
+
 $routes = [
     '/' => ['controller' => 'Index', 'method' => 'GET'],
     '/produtos' => ['controller' => 'GetProdutos', 'method' => 'GET'],
+    '/produto/[0-9]+' => ['controller' => 'GetProdutos', 'method' => 'GET'],
     '/alterar/[0-9]+' => ['controller' => 'AlterarProduto', 'method' => 'PUT'],
     '/cadastrar' => ['controller' => 'CadastrarProduto', 'method' => 'POST'],
     '/deletar/[0-9]+' => ['controller' => 'DeletarProduto', 'method' => 'DELETE']

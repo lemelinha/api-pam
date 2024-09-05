@@ -9,18 +9,31 @@ function Index() {
     die();
 }
 
-function GetProdutos() {
+function GetProdutos($cd=null) {
     global $conn;
 
     $sql = "SELECT
                 *
             FROM
                 tb_produto";
+    if ($cd){
+        $sql .= " WHERE cd_produto = :cd";
+    }
+    
     $smt = $conn->prepare($sql);
+    if ($cd){
+        $smt->bindParam(':cd', $cd, PDO::PARAM_INT);
+    }
+    
     $smt->execute();
     $rep = $smt->fetchAll();
-
-    return ['ok' => true, 'produtos' => $rep];
+    
+    if (isset($_GET['html']) && $_GET['html']) {
+        require_once '../Views/produtos.php';
+        die();
+    }
+    
+    return $cd?['ok' => true, 'produto' => $rep[0]]:['ok' => true, 'produtos' => $rep];
 }
 
 function AlterarProduto($cd) {

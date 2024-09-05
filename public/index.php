@@ -2,6 +2,10 @@
 
 header("Content-type: application/json; charset=utf-8");
 
+if (isset($_GET['html']) && $_GET['html']) {
+    header("Content-type: text/html; charset=utf-8");
+}
+
 require_once '../router.php';
 require_once '../functions.php';
 
