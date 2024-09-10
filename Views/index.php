@@ -36,6 +36,7 @@
                 <input type="text" name="nome" placeholder="Nome">
                 <input type="text" name="qt" placeholder="Quantidade">
                 <input type="text" name="ds" placeholder="Descrição">
+                <input type="url" name="imagem" placeholder="Imagem (link)">
                 <input type="submit" value="Cadastrar">
             </form>
         </section>
@@ -48,8 +49,24 @@
                 <input type="text" name="nome" placeholder="Nome" id="nome">
                 <input type="number" name="qt" placeholder="Quantidade" id="qt">
                 <input type="text" name="ds" placeholder="Descrição" id="ds">
+                <input type="url" name="imagem" placeholder="Imagem (link)" id="imagem">
                 <input type="submit" value="Alterar">
             </form>
+            <script>
+                $('#alterar form').on('submit', function(e) {
+                    e.preventDefault()
+                    $.ajax({
+                        url: `/alterar/${$(this).attr('id')}`,
+                        type: 'PUT',
+                        data: $(this).serialize(),
+                        dataType: 'json'
+                    })
+                    .done(function (data) {
+                        alert(data.msg)
+                        getProdutos()
+                    })
+                })
+            </script>
         </section>
         <script>
             $('.nav a').click(function () {
@@ -76,6 +93,7 @@
             $('.btns button.alterar').click(function () {
                 $('section#produtos').css('display', 'none')
                 $('section#alterar').css('display', 'block')
+                
 
                 getProduto($(this).attr('id'))
             })
@@ -111,6 +129,8 @@
                     $('section#alterar input#nome').val(data.produto.nm_produto)
                     $('section#alterar input#qt').val(data.produto.qt_pote)
                     $('section#alterar input#ds').val(data.produto.ds_produto)
+                    $('section#alterar input#imagem').val(data.produto.url_imagem)
+                    $('section#alterar form').attr('id', data.produto.cd_produto)
                 })
                 .catch(function () {
                     alert('algo deu errado')

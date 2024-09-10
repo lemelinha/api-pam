@@ -5,7 +5,7 @@ $conn = require_once 'connection.php';
 function Index() {
     header("Content-type: text/html; charset=utf-8");
     $produtos = GetProdutos()['produtos'];
-    require_once '..\Views\index.php';
+    require_once './Views/index.php';
     die();
 }
 
@@ -29,7 +29,7 @@ function GetProdutos($cd=null) {
     $rep = $smt->fetchAll();
     
     if (isset($_GET['html']) && $_GET['html']) {
-        require_once '../Views/produtos.php';
+        require_once './Views/produtos.php';
         die();
     }
     
@@ -39,10 +39,12 @@ function GetProdutos($cd=null) {
 function AlterarProduto($cd) {
     global $conn;
 
-    if (empty($_POST) || !(
-        isset($_POST['nome']) ||
-        isset($_POST['qt']) ||
-        isset($_POST['ds'])
+    parse_str(file_get_contents("php://input"), $_PUT);
+    if (empty($_PUT) || !(
+        isset($_PUT['nome']) ||
+        isset($_PUT['qt']) ||
+        isset($_PUT['ds']) ||
+        isset($_PUT['imagem'])
     )) {
         return ['ok' => false, 'msg' => 'Dados de envio inválidos'];
     }
@@ -52,14 +54,16 @@ function AlterarProduto($cd) {
             SET
                 nm_produto = :nome,
                 qt_pote = :qt,
-                ds_produto = :ds
+                ds_produto = :ds,
+                url_imagem = :imagem
             WHERE
                 cd_produto = :cd";
     $smt = $conn->prepare($sql);
-    $smt->bindParam(':nome', $cd, PDO::PARAM_INT);
-    $smt->bindParam(':nome', $_POST['nome']);
-    $smt->bindParam(':qt', $_POST['qt'], PDO::PARAM_INT);
-    $smt->bindParam(':ds', $_POST['ds']);
+    $smt->bindParam(':cd', $cd, PDO::PARAM_INT);
+    $smt->bindParam(':nome', $_PUT['nome']);
+    $smt->bindParam(':qt', $_PUT['qt'], PDO::PARAM_INT);
+    $smt->bindParam(':ds', $_PUT['ds']);
+    $smt->bindParam(':imagem', $_PUT['imagem']);
     $smt->execute();
 
     return ['ok' => true, 'msg' => 'Produto Alterado com sucesso!'];
@@ -71,8 +75,9 @@ function CadastrarProduto() {
     if (empty($_POST) || !(
         isset($_POST['nome']) ||
         isset($_POST['qt']) ||
-        isset($_POST['ds'])
-    )) {
+        isset($_POST['ds']) ||
+        isset($_POST['imagem']))
+    ) {
         return ['ok' => false, 'msg' => 'Dados de envio inválidos'];
     }
 
@@ -81,11 +86,13 @@ function CadastrarProduto() {
             SET
                 nm_produto = :nome,
                 qt_pote = :qt,
-                ds_produto = :ds";
+                ds_produto = :ds,
+                url_imagem = :imagem";
     $smt = $conn->prepare($sql);
     $smt->bindParam(':nome', $_POST['nome']);
     $smt->bindParam(':qt', $_POST['qt'], PDO::PARAM_INT);
     $smt->bindParam(':ds', $_POST['ds']);
+    $smt->bindParam(':imagem', $_POST['imagem']);
     $smt->execute();
 
     return ['ok' => true, 'msg' => 'Produto Cadastrado com sucesso!'];

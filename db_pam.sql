@@ -1,3 +1,4 @@
+drop database if exists db_pam;
 create database if not exists db_pam;
 use db_pam;
 
