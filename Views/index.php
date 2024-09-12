@@ -34,11 +34,27 @@
         <section id="cadastrar" style="display: none">
             <form id="form-cadastrar" method="post">
                 <input type="text" name="nome" placeholder="Nome">
-                <input type="text" name="qt" placeholder="Quantidade">
+                <input type="number" name="qt" placeholder="Quantidade">
                 <input type="text" name="ds" placeholder="Descrição">
                 <input type="url" name="imagem" placeholder="Imagem (link)">
                 <input type="submit" value="Cadastrar">
             </form>
+            <script>
+                $('form#form-cadastrar').on('submit', function (e) {
+                    e.preventDefault()
+
+                    $.ajax({
+                        url: '/cadastrar',
+                        type: 'POST',
+                        data: $(this).serialize(),
+                        dataType: 'json'
+                    })
+                    .done(function (data) {
+                        alert(data.msg)
+                        window.location.href = '/'
+                    })
+                })
+            </script>
         </section>
         <section id="alterar" style="display: none">
             <button class="voltar">
