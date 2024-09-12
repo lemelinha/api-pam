@@ -63,7 +63,7 @@
                     })
                     .done(function (data) {
                         alert(data.msg)
-                        getProdutos()
+                        window.location.href = '/'
                     })
                 })
             </script>
@@ -85,8 +85,8 @@
                     dataType: 'json',
                 })
                 .done(function (data) {
-                    getProdutos()
                     alert(data.msg)
+                    window.location.reload()
                 })
             })
 
